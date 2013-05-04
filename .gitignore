@@ -1,22 +1,19 @@
-*.mode1v3
-
-# xcode
-*.pbxuser
-*.perspectivev3
-xcuserdata
-build
-*.app
-*.a
-
-# OSX
-.DS_Store
-
-# codeblocks
-*.layout
 *.depend
-*.cbTemp
-example/obj
+*.layout
+*.mode*v3
+*.pbxuser
+*.app*
+*.DS_*
+*.xcworkspacedata
+xcuserdata/
 
-# Win
-*.exe
-*.dll
+*.opensdf
+*.sdf
+*.suo
+*.ipch
+
+.svn/
+obj/
+bin/
+build/
+!data/

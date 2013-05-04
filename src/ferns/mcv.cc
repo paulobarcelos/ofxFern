@@ -24,9 +24,14 @@
 #include <math.h>
 
 #include <cv.h>
-#include <highgui.h>
+#include <highgui_c.h>
 
 #include "mcv.h"
+
+#undef CV_MIN
+#undef CV_MAX
+#define  CV_MIN(a, b)   ((a) <= (b) ? (a) : (b))
+#define  CV_MAX(a, b)   ((a) >= (b) ? (a) : (b))
 
 using namespace std;
 
@@ -432,7 +437,7 @@ void mcvScaleTo0_255(IplImage * original, IplImage * scaled)
 
 int mcvSaveImage(const char * filename, IplImage * image, bool verbose)
 {
-  if (verbose)
+  /*if (verbose)
     cout << "(saving " << filename << "..." << flush;
 
   int result;
@@ -464,7 +469,8 @@ int mcvSaveImage(const char * filename, IplImage * image, bool verbose)
   if (verbose && result)
     cout << "ok)" << endl;
 
-  return result;
+  return result;*/
+	return 0;
 }
 
 int mcvSaveImage(const char * generic_filename, int index, IplImage * image, bool verbose)
@@ -485,7 +491,7 @@ IplImage * mcvCreateSimilarImage(IplImage * image)
 
 IplImage * mcvLoadImage(const char * filename, int code, bool verbose)
 {
-  if (verbose)
+  /*if (verbose)
     cout << "(loading " << filename << "..." << flush;
 
   IplImage * result = cvLoadImage(filename, code);
@@ -496,7 +502,8 @@ IplImage * mcvLoadImage(const char * filename, int code, bool verbose)
   if (verbose && result)
     cout << "ok)" << endl;
 
-  return result;
+  return result;*/
+	return 0;
 }
 
 IplImage * mcvLoadImage(const char * generic_filename, int index, int code, bool verbose)
