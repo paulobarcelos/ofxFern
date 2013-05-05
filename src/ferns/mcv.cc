@@ -24,7 +24,7 @@
 #include <math.h>
 
 #include <cv.h>
-#include <highgui_c.h>
+#include <highgui.h>
 
 #include "mcv.h"
 
@@ -437,12 +437,12 @@ void mcvScaleTo0_255(IplImage * original, IplImage * scaled)
 
 int mcvSaveImage(const char * filename, IplImage * image, bool verbose)
 {
-  /*if (verbose)
+  if (verbose)
     cout << "(saving " << filename << "..." << flush;
 
   int result;
 
-  if (image->depth == IPL_DEPTH_8U)
+  /*if (image->depth == IPL_DEPTH_8U)
     result = cvSaveImage(filename, image);
   else
   {
@@ -461,7 +461,26 @@ int mcvSaveImage(const char * filename, IplImage * image, bool verbose)
     result = cvSaveImage(filename, tempImage);
 
     cvReleaseImage(&tempImage);
-  }
+  }*/
+	ofxCvImage * tranferImage;
+	ofImage imageSaver;
+	imageSaver.allocate(image->width, image->height, OF_IMAGE_COLOR);
+	switch (image->nChannels) {
+		case 1:
+			tranferImage = new ofxCvGrayscaleImage();
+			break;
+		default:
+			tranferImage = new ofxCvColorImage();
+			break;
+	}
+	tranferImage->allocate(image->width, image->height);
+	*tranferImage = image;
+	
+	imageSaver.setFromPixels(tranferImage->getPixels(), image->width, image->height, OF_IMAGE_COLOR);
+	imageSaver.saveImage(filename);
+	
+	delete tranferImage;
+	result = 1;
 
   if (verbose && !result)
     cout << "ERROR !" << endl;
@@ -469,8 +488,7 @@ int mcvSaveImage(const char * filename, IplImage * image, bool verbose)
   if (verbose && result)
     cout << "ok)" << endl;
 
-  return result;*/
-	return 0;
+  return result;
 }
 
 int mcvSaveImage(const char * generic_filename, int index, IplImage * image, bool verbose)
@@ -491,10 +509,30 @@ IplImage * mcvCreateSimilarImage(IplImage * image)
 
 IplImage * mcvLoadImage(const char * filename, int code, bool verbose)
 {
-  /*if (verbose)
+  if (verbose)
     cout << "(loading " << filename << "..." << flush;
 
-  IplImage * result = cvLoadImage(filename, code);
+  ofImage imageLoader;
+  imageLoader.loadImage(filename);
+
+	ofxCvColorImage transferImage;
+	transferImage.allocate(imageLoader.getWidth(), imageLoader.getHeight());
+	transferImage.setFromPixels(imageLoader.getPixelsRef());
+
+	ofxCvImage * codedImage;
+	switch (code) {
+		case 0:
+			codedImage = new ofxCvGrayscaleImage();
+			break;
+		case 1:
+		default:
+			codedImage = new ofxCvColorImage();
+			break;
+	}
+	codedImage->allocate(imageLoader.getWidth(), imageLoader.getHeight());
+	*codedImage = transferImage;
+	
+  IplImage * result = codedImage->getCvImage();
 
   if (verbose && !result)
     cout << "ERROR !" << endl;
@@ -502,8 +540,7 @@ IplImage * mcvLoadImage(const char * filename, int code, bool verbose)
   if (verbose && result)
     cout << "ok)" << endl;
 
-  return result;*/
-	return 0;
+  return result;
 }
 
 IplImage * mcvLoadImage(const char * generic_filename, int index, int code, bool verbose)

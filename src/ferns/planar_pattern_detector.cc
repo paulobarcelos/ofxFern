@@ -28,6 +28,11 @@ using namespace std;
 #include "planar_pattern_detector.h"
 #include "buffer_management.h"
 
+#undef CV_MIN
+#undef CV_MAX
+#define  CV_MIN(a, b)   ((a) <= (b) ? (a) : (b))
+#define  CV_MAX(a, b)   ((a) >= (b) ? (a) : (b))
+
 planar_pattern_detector::planar_pattern_detector(void)
 {
   model_image = 0;
@@ -277,7 +282,7 @@ void planar_pattern_detector::test(int number_of_samples_for_test, bool verbose)
 
 IplImage * planar_pattern_detector::create_image_of_matches(void)
 {
-  int width = MAX(model_image->width, pyramid->original_image->width);
+  int width = CV_MAX(model_image->width, pyramid->original_image->width);
   int height = model_image->height + pyramid->original_image->height;
   IplImage * result = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, 3);
 

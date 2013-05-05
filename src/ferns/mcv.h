@@ -24,6 +24,9 @@
 #define MCV_H
 
 #include <cv.h>
+#include "ofMain.h"
+#include "ofxOpenCv.h"
+
 
 /*! \file */
 
