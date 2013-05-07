@@ -33,9 +33,19 @@ ofxFern::~ofxFern(){
 }
 
 //------------------------------------------------------------------------
-void ofxFern::setup(string marker, int width, int height){
+void ofxFern::setup(string marker, int width, int height,
+					int maximum_number_of_points_on_model,
+					int number_of_generated_images_to_find_stable_points,
+					double minimum_number_of_views_rate,
+					int patch_size,
+					int yape_radius,
+					int number_of_octaves,
+					int number_of_ferns,
+					int number_of_tests_per_fern,
+					int number_of_samples_for_refinement,
+					int number_of_samples_for_test){
 	
-	img.allocate(width, height); 
+	img.allocate(width, height);
 	marker = ofToDataPath(marker);
 
 	string model_image			= marker;
@@ -43,8 +53,17 @@ void ofxFern::setup(string marker, int width, int height){
 	string video_file			= "";
 
 	affine_transformation_range range;
-	detector = planar_pattern_detector_builder::build_with_cache(model_image.c_str(),
-					&range, 400, 5000, 0.0, 32, 7, 4,30, 12, 10000, 200);
+	detector = planar_pattern_detector_builder::build_with_cache(model_image.c_str(), &range,
+																 maximum_number_of_points_on_model,
+																 number_of_generated_images_to_find_stable_points,
+																 minimum_number_of_views_rate,
+																 patch_size,
+																 yape_radius,
+																 number_of_octaves,
+																 number_of_ferns,
+																 number_of_tests_per_fern,
+																 number_of_samples_for_refinement,
+																 number_of_samples_for_test);
 
   if(!detector) {
     ofLog(OF_LOG_ERROR, "ofxFern: Unable to build detector");
